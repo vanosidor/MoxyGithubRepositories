@@ -7,4 +7,18 @@ import com.arellomobile.mvp.MvpView;
  */
 
 public interface AuthView extends MvpView {
+
+    void showAuthFieldsError(Integer emailError, Integer passwordError);
+
+    void hideAuthFieldsError();
+
+    void showAuthProgress();
+
+    void hideAuthProgress();
+
+    void successLogin();
+
+    void failedLogin(String message);
+
+    void hideLoginErrorDialog();
 }

@@ -15,7 +15,16 @@ public class SplashPresenter extends MvpPresenter <SplashView> {
     public void attachView(SplashView view) {
         super.attachView(view);
 
-        //view.setAuthorized(!TextUtils.isEmpty(AuthUtils.getToken()));
-        view.setAuthorized(false);
+        view.setAuthorized(!TextUtils.isEmpty(AuthUtils.getToken()));
+        //logout();
+        //for test
+        //view.setAuthorized(false);
+        //view.setAuthorized(true);
     }
+
+    //logout
+    public void logout(){
+        AuthUtils.setToken(null);
+    }
+
 }

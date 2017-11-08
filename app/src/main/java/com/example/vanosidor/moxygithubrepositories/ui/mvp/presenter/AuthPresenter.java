@@ -1,11 +1,23 @@
 package com.example.vanosidor.moxygithubrepositories.ui.mvp.presenter;
 
+import android.text.TextUtils;
+
 import com.arellomobile.mvp.InjectViewState;
-import com.arellomobile.mvp.MvpPresenter;
+import com.example.vanosidor.moxygithubrepositories.R;
+import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubService;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.utils.AuthUtils;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.AuthView;
 
+import android.util.Base64;
+
 import javax.inject.Inject;
+
+
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Ivan on 06.11.2017.
@@ -17,5 +29,58 @@ public class AuthPresenter extends BasePresenter<AuthView>{
     @Inject
     GithubService githubService;
 
+    public AuthPresenter() {
+        GithubApp.getAppComponent().inject(this);
+    }
 
+    public void attemptLogin(String email, String password){
+        Integer emailError = null;
+        Integer passwordError =null;
+
+        //put validation mail here
+        if(TextUtils.isEmpty(email) /*|| !isValidEmail(email)*/){
+            emailError = R.string.email_error;
+        }
+
+        if(TextUtils.isEmpty(password)){
+            passwordError = R.string.password_error;
+        }
+
+        if(passwordError!=null || emailError != null){
+            getViewState().showAuthFieldsError(emailError,passwordError);
+            return;
+        }
+
+        getViewState().showAuthProgress();
+
+        String credentials = String.format("%s:%s",email,password);
+        final String token = "Basic "+ Base64.encodeToString(credentials.getBytes(),Base64.NO_WRAP);
+
+
+
+        Subscription subscription = githubService.signIn(token)
+                .doOnNext(user->AuthUtils.setToken(token))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(user -> {
+                    getViewState().hideAuthProgress();
+                    getViewState().successLogin();
+                },exception->{
+                    getViewState().hideAuthProgress();
+                    getViewState().failedLogin(exception.getMessage());
+                });
+
+        unsubscribeOnDestroy(subscription);
+
+    }
+
+
+    //validation mail
+    /*private  boolean isValidEmail(CharSequence target) {
+        return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }*/
+
+    public void onErrorCancel() {
+        getViewState().hideLoginErrorDialog();
+    }
 }

@@ -13,6 +13,7 @@ import rx.Observable;
  */
 
 public interface GithubApi {
+
     @GET("/user")
     Observable <User> signIn(@Header("Authorization") String token);
 }

@@ -15,7 +15,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BasePresenter <View extends MvpView> extends MvpPresenter <View> {
 
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
     protected void unsubscribeOnDestroy(@NonNull Subscription subscription){
         mCompositeSubscription.add(subscription);
