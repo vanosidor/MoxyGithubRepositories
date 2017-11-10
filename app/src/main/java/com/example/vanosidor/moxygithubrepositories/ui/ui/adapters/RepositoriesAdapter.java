@@ -22,13 +22,18 @@ import butterknife.ButterKnife;
 
 public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapter.RepositoriesViewHolder> {
 
-    private List<Repository> mData = new ArrayList<>();
+    private List<Repository> mRepositories = new ArrayList<>();
 
     private Context mContext;
 
-    public RepositoriesAdapter(Context context,List<Repository> data) {
+    public RepositoriesAdapter(Context context) {
         mContext=context;
-        mData = data;
+    }
+
+    public void setRepositoriesToAdapter(List<Repository> repositories){
+        mRepositories.clear();
+        mRepositories.addAll(repositories);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -39,14 +44,14 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapt
 
     @Override
     public void onBindViewHolder(RepositoriesViewHolder holder, int position) {
-        holder.textView.setText(mData.get(position).getData());
-        holder.textView2.setText(mData.get(position).getName());
+        holder.textView.setText(mRepositories.get(position).getName());
+//        holder.textView2.setText(mRepositories.get(position).getId());
     }
 
     @Override
     public int getItemCount() {
-        if(mData != null) {
-            if(mData.size()!=0) return mData.size();
+        if(mRepositories != null) {
+            if(mRepositories.size()!=0) return mRepositories.size();
             else return 0;
         }
         else return 0;

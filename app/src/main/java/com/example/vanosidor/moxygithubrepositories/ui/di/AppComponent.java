@@ -8,6 +8,7 @@ import com.example.vanosidor.moxygithubrepositories.ui.di.module.ContextModule;
 import com.example.vanosidor.moxygithubrepositories.ui.di.module.GithubModule;
 import com.example.vanosidor.moxygithubrepositories.ui.di.module.RetrofitModule;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.presenter.AuthPresenter;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.presenter.RepositoriesPresenter;
 
 import javax.inject.Singleton;
 
@@ -23,4 +24,5 @@ public interface AppComponent {
     GithubService githubService();
 
     void inject(AuthPresenter authPresenter);
+    void inject(RepositoriesPresenter repositoriesPresenter);
 }

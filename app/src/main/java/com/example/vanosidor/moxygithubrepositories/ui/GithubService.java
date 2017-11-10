@@ -1,9 +1,14 @@
 package com.example.vanosidor.moxygithubrepositories.ui;
 
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.User;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**
@@ -23,4 +28,7 @@ public class GithubService {
     public Observable<User> signIn(String token) {
         return mGithubApi.signIn(token);
     }
+
+    public Observable <List<Repository>> getRepositories(String userName) {
+        return mGithubApi.getUsersRepositories(userName);}
 }

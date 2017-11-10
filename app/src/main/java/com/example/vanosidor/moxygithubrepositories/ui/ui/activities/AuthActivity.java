@@ -1,4 +1,4 @@
-package com.example.vanosidor.moxygithubrepositories.ui.ui;
+package com.example.vanosidor.moxygithubrepositories.ui.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.vanosidor.moxygithubrepositories.R;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.presenter.AuthPresenter;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.AuthView;
-import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.RepositoriesView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,6 +85,7 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView{
     @Override
     public void successLogin() {
         Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

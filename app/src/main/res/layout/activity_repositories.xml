@@ -15,19 +15,40 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         app:title="Repositories"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/repositories_refresh_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/repositories_recycler_view"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-        </android.support.v7.widget.RecyclerView>
+            tools:ignore="ScrollViewSize">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/repositories_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/no_repositories_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/no_repositories"
+                android:visibility="gone" />
+        </FrameLayout>
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/repositories_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
 
 </LinearLayout>
