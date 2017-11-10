@@ -9,6 +9,7 @@ import java.util.List;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -21,5 +22,5 @@ public interface GithubApi {
     Observable<User> signIn(@Header("Authorization") String token);
 
     @GET("/users/{login}/repos")
-    Observable<List<Repository>> getUsersRepositories(@Path("login") String username);
+    Observable<List<Repository>> getUsersRepositories(@Path("login") String username,@Query("page") int page, @Query("per_page") int pageSize);
 }

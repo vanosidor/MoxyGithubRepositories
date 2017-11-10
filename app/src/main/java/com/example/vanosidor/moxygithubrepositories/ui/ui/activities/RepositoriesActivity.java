@@ -1,7 +1,9 @@
 package com.example.vanosidor.moxygithubrepositories.ui.ui.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,8 +83,22 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         mRecyclerView.setAdapter(mRepositoriesAdapter);
 
         //mRefreshView.setEnabled(false);
-        mRefreshView.setOnRefreshListener(() -> mRepositoriesPresenter.loadRepositories(true));
+        mRefreshView.setOnRefreshListener(() -> mRepositoriesPresenter.loadRepositories(RepositoriesPresenter.State.REFRESH));
 
+        //mRecyclerView.set
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(layoutManager.findLastCompletelyVisibleItemPosition() == mRepositoriesAdapter.getItemCount()-1){
+                    //bottom of list!
+                    //Toast.makeText(RepositoriesActivity.this, "Scroll to the end", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onScrolled: Scroll to the end.Item count = " + mRepositoriesAdapter.getItemCount());
+                    mRepositoriesPresenter.loadMoreRepositories(mRepositoriesAdapter.getItemCount());
+                }
+            }
+        });
     }
 
     @Override
@@ -118,6 +134,12 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
     }
 
     @Override
+    public void showMoreData(List<Repository> repositories) {
+        mRepositoriesAdapter.showMoreData(repositories);
+        Log.d(TAG, "showMoreData");
+    }
+
+    @Override
     public void showEmptyData() {
         Log.d(TAG, "showEmptyData");
         mNoRepositoriesTextView.setVisibility(View.VISIBLE);
@@ -133,11 +155,13 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
     @Override
     public void showRefreshView() {
         mRefreshView.setRefreshing(true);
+        mRefreshView.setEnabled(false);
     }
 
     @Override
     public void hideRefreshView() {
         mRefreshView.setRefreshing(false);
+        mRefreshView.setEnabled(true);
     }
 
     @Override
@@ -152,5 +176,16 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         mRefreshView.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void showLoadMoreProgress() {
+        Toast.makeText(this, "loading more start indicator", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "showLoadMoreProgress");
+    }
+
+    @Override
+    public void hideLoadMoreProgress() {
+        Toast.makeText(this, "loading more stop indicator", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "hideLoadMoreProgress");
+    }
 
 }

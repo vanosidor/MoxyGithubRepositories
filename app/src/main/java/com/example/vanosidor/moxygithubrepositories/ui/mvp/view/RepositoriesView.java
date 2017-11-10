@@ -13,6 +13,8 @@ public interface RepositoriesView extends MvpView {
 
     void showData(List<Repository> repositories);
 
+    void showMoreData(List<Repository> repositories);
+
     void showEmptyData();
 
     void showError(Throwable t);
@@ -25,4 +27,7 @@ public interface RepositoriesView extends MvpView {
 
     void hideLoadingProgressBar();
 
+    void showLoadMoreProgress();
+
+    void hideLoadMoreProgress();
 }

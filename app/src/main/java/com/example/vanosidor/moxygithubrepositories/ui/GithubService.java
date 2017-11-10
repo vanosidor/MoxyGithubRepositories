@@ -29,6 +29,6 @@ public class GithubService {
         return mGithubApi.signIn(token);
     }
 
-    public Observable <List<Repository>> getRepositories(String userName) {
-        return mGithubApi.getUsersRepositories(userName);}
+    public Observable <List<Repository>> getRepositories(String userName, int page, int pageSize) {
+        return mGithubApi.getUsersRepositories(userName,page,pageSize);}
 }

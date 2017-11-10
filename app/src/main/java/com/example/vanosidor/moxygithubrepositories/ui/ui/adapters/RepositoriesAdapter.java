@@ -36,6 +36,11 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapt
         notifyDataSetChanged();
     }
 
+    public void showMoreData(List<Repository> repositories) {
+        mRepositories.addAll(repositories);
+        notifyDataSetChanged();
+    }
+
     @Override
     public RepositoriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.repository_item,parent,false);
