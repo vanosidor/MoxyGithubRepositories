@@ -5,14 +5,14 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubService;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.NetworkDataSource;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.RepositoryDataSource;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.TestDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.RepositoriesView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-
-import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscription;
@@ -26,24 +26,24 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
-    private static final int PAGE_SIZE = 50;
+    private static final int PAGE_SIZE = 30;
     private static final String TAG = RepositoriesPresenter.class.getSimpleName();
 
     public enum State {FIRSTLOADING,REFRESH,LOADMORE}
 
-    @Inject
-    GithubService mGithubService;
+    private int mCurrentPageCount;
 
     private boolean mIsLoading;
 
     public RepositoriesPresenter() {
-        GithubApp.getAppComponent().inject(this);
+
     }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
+        Log.d(TAG, "onFirstViewAttach");
         loadRepositories(State.FIRSTLOADING);
     }
 
@@ -53,19 +53,31 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
     public void loadMoreRepositories(int currentPageCount){
 
-        int page = currentPageCount / PAGE_SIZE + 1;
-        loadData(State.LOADMORE,page);
+        //loadingStart(State.LOADMORE);
+
+        if(mCurrentPageCount >= PAGE_SIZE){
+            int page = currentPageCount / PAGE_SIZE + 1;
+            Log.d(TAG, "loadMoreRepositories.Page number = " + page);
+            loadData(State.LOADMORE,page);
+        }
     }
+
 
     private void loadData(State state, int page) {
 
+        //https://api.github.com/users/JakeWharton/repos?page=2&&per_page=50
+
+        RepositoryDataSource dataSource = new TestDataSource();
+
+        //Load from network
         if (mIsLoading) {
             return;
         }
 
         loadingStart(state);
 
-        Observable<List<Repository>> repositoriesObservable = mGithubService.getRepositories("JakeWharton",page,PAGE_SIZE);
+        Observable <List<Repository>> repositoriesObservable =  dataSource.getRepositories("JakeWharton",page,PAGE_SIZE);
+        //Observable<List<Repository>> repositoriesObservable = mGithubService.getRepositories("JakeWharton",page,PAGE_SIZE);
 
         Subscription subscription = repositoriesObservable
                 .subscribeOn(Schedulers.io())
@@ -111,6 +123,10 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
     }
 
     private void loadingSuccess(List<Repository> repositories,State state) {
+
+        Log.d(TAG, "loadingSuccess: loaded "+repositories.size()+" items");
+
+        mCurrentPageCount = repositories.size();
 
         if(state!= State.LOADMORE){
             if(repositories.size()==0) getViewState().showEmptyData();

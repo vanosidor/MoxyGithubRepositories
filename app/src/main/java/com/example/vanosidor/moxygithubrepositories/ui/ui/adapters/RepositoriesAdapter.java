@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.vanosidor.moxygithubrepositories.R;
@@ -20,7 +21,10 @@ import butterknife.ButterKnife;
  * Created by Stend on 08.11.2017.
  */
 
-public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapter.RepositoriesViewHolder> {
+public class RepositoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolder> {
+
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
 
     private List<Repository> mRepositories = new ArrayList<>();
 
@@ -30,27 +34,62 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapt
         mContext=context;
     }
 
-    public void setRepositoriesToAdapter(List<Repository> repositories){
-        mRepositories.clear();
+    public void setRepositories(List<Repository> repositories){
+        mRepositories = new ArrayList<>(repositories);
+        notifyDataSetChanged();
+    }
+
+    public void addRepositories(List<Repository> repositories) {
         mRepositories.addAll(repositories);
         notifyDataSetChanged();
     }
 
-    public void showMoreData(List<Repository> repositories) {
-        mRepositories.addAll(repositories);
-        notifyDataSetChanged();
+    public void showLoadMoreAnimation(){
+        mRepositories.add(null);
+
+        int recyclerPosition = mRepositories.size();
+
+        notifyItemInserted(recyclerPosition);
+
+    }
+
+    public void hideLoadMoreAnimation(){
+        mRepositories.remove(mRepositories.size()-1);
+        notifyItemRemoved(mRepositories.size());
     }
 
     @Override
-    public RepositoriesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.repository_item,parent,false);
-        return new RepositoriesViewHolder(itemView);
+    public int getItemViewType(int position) {
+        return mRepositories.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     @Override
-    public void onBindViewHolder(RepositoriesViewHolder holder, int position) {
-        holder.textView.setText(mRepositories.get(position).getName());
-//        holder.textView2.setText(mRepositories.get(position).getId());
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if(viewType == VIEW_TYPE_ITEM){
+            View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_repository,parent,false);
+            return new RepositoriesViewHolder(itemView);
+        }
+
+        else if (viewType == VIEW_TYPE_LOADING) {
+            View loadingView = LayoutInflater.from(mContext).inflate(R.layout.item_loading, parent, false);
+            return new LoadingViewHolder(loadingView);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder instanceof RepositoriesViewHolder){
+            RepositoriesViewHolder repositoriesViewHolder  = (RepositoriesViewHolder)holder;
+            repositoriesViewHolder.textView.setText(mRepositories.get(position).getName());
+            repositoriesViewHolder.textView2.setText(String.valueOf(position));
+        }
+        else if(holder instanceof LoadingViewHolder){
+            LoadingViewHolder loadingViewHolder = (LoadingViewHolder)holder;
+
+            loadingViewHolder.progressBar.setIndeterminate(true);
+        }
     }
 
     @Override
@@ -68,12 +107,24 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RepositoriesAdapt
         @BindView(R.id.textView)
         TextView textView;
 
-        @BindView(R.id.textView2)
+        @BindView(R.id.tv2)
         TextView textView2;
 
 
         public RepositoriesViewHolder(View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this,itemView);
+        }
+    }
+
+    class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.loading_more_progress_bar)
+        public ProgressBar progressBar;
+
+        public LoadingViewHolder(View view) {
+            super(view);
 
             ButterKnife.bind(this,itemView);
         }
