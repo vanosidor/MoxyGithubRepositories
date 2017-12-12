@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
-    private static final int PAGE_SIZE = 30;
+    private static final int PAGE_SIZE = 50;
     private static final String TAG = RepositoriesPresenter.class.getSimpleName();
 
     public enum State {FIRSTLOADING,REFRESH,LOADMORE}
@@ -51,12 +51,12 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
         loadData(state,1);
     }
 
-    public void loadMoreRepositories(int currentPageCount){
+    public void loadMoreRepositories(int repositoriesCount){
 
         //loadingStart(State.LOADMORE);
 
         if(mCurrentPageCount >= PAGE_SIZE){
-            int page = currentPageCount / PAGE_SIZE + 1;
+            int page = repositoriesCount / PAGE_SIZE + 1;
             Log.d(TAG, "loadMoreRepositories.Page number = " + page);
             loadData(State.LOADMORE,page);
         }
@@ -67,7 +67,9 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         //https://api.github.com/users/JakeWharton/repos?page=2&&per_page=50
 
+        //change real data to test data from local json
         RepositoryDataSource dataSource = new TestDataSource();
+        //RepositoryDataSource dataSource = new NetworkDataSource();
 
         //Load from network
         if (mIsLoading) {
@@ -82,7 +84,7 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
         Subscription subscription = repositoriesObservable
                 .subscribeOn(Schedulers.io())
                 //.doOnSubscribe(this::showLoadingView)
-                .delay(3000, TimeUnit.MILLISECONDS) //imitation of slow download
+                .delay(500, TimeUnit.MILLISECONDS) //imitation of slow download
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositories -> {
                             //repositories=new ArrayList<>(); //test no repositories

@@ -2,6 +2,7 @@ package com.example.vanosidor.moxygithubrepositories.ui.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,15 @@ import butterknife.ButterKnife;
 
 public class RepositoriesAdapter extends RecyclerView.Adapter <RecyclerView.ViewHolder> {
 
+    public static final String TAG = RepositoriesAdapter.class.getSimpleName();
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
 
     private List<Repository> mRepositories = new ArrayList<>();
 
     private Context mContext;
+
+    private int mProgressBarPosition;
 
     public RepositoriesAdapter(Context context) {
         mContext=context;
@@ -45,17 +49,21 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RecyclerView.View
     }
 
     public void showLoadMoreAnimation(){
+
         mRepositories.add(null);
-
-        int recyclerPosition = mRepositories.size();
-
-        notifyItemInserted(recyclerPosition);
-
+        mProgressBarPosition = mRepositories.size()-1;
+        Log.d(TAG, "showLoadMoreAnimation.Recycler view at position = " + mProgressBarPosition);
+        notifyItemInserted(mProgressBarPosition);
     }
 
     public void hideLoadMoreAnimation(){
-        mRepositories.remove(mRepositories.size()-1);
-        notifyItemRemoved(mRepositories.size());
+        Log.d(TAG, "Hide Load More Animation. Deleted recycler view at position = " + (mRepositories.size()-1));
+
+        if(mRepositories.get(mProgressBarPosition) == null){
+            mRepositories.remove(mProgressBarPosition);
+            notifyItemRemoved(mProgressBarPosition);
+        }
+
     }
 
     @Override
@@ -99,6 +107,12 @@ public class RepositoriesAdapter extends RecyclerView.Adapter <RecyclerView.View
             else return 0;
         }
         else return 0;
+    }
+
+    public void clearRepositories() {
+        int countRepositories = mRepositories.size();
+        mRepositories = new ArrayList<>();
+        notifyItemRangeRemoved(0,countRepositories);
     }
 
 

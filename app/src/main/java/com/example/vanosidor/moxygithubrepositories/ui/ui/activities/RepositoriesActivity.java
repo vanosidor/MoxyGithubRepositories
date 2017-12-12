@@ -61,11 +61,7 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
 
     RepositoriesAdapter mRepositoriesAdapter;
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Log.d(TAG, "onConfigurationChanged:");
-    }
+    RecyclerView.OnScrollListener mOnScrolllistener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +83,12 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         mRepositoriesAdapter = new RepositoriesAdapter(this);
         mRecyclerView.setAdapter(mRepositoriesAdapter);
 
-        //mRefreshView.setEnabled(false);
         mRefreshView.setOnRefreshListener(() -> {
             mRepositoriesPresenter.loadRepositories(RepositoriesPresenter.State.REFRESH);
             Log.d(TAG, "Refresh:Item count = " + mRepositoriesAdapter.getItemCount());
         });
 
-        //mRecyclerView.set
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mOnScrolllistener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -103,10 +96,10 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
 
                     Log.d(TAG, "onScrolled: Scroll to the end.Item count = " + mRepositoriesAdapter.getItemCount());
                     mRepositoriesPresenter.loadMoreRepositories(mRepositoriesAdapter.getItemCount());
-
                 }
             }
-        });
+        };
+        mRecyclerView.addOnScrollListener(mOnScrolllistener);
     }
 
     @Override
@@ -138,13 +131,13 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         mRecyclerView.setVisibility(View.VISIBLE);
         mNoRepositoriesTextView.setVisibility(View.GONE);
         mRepositoriesAdapter.setRepositories(repositories);
-        Log.d(TAG, "showData");
+        Log.d(TAG, "showData.Item count = " + mRepositoriesAdapter.getItemCount());
     }
 
     @Override
     public void showMoreData(List<Repository> repositories) {
         mRepositoriesAdapter.addRepositories(repositories);
-        Log.d(TAG, "addRepositories");
+        Log.d(TAG, "showMoreData.Item count = " + mRepositoriesAdapter.getItemCount());
     }
 
     @Override
@@ -152,7 +145,6 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         Log.d(TAG, "showEmptyData");
         mNoRepositoriesTextView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-        //mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -162,16 +154,17 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
 
     @Override
     public void showRefreshView() {
+        mRecyclerView.clearOnScrollListeners();
+        mRepositoriesAdapter.clearRepositories();
         mRefreshView.setRefreshing(true);
         Log.d(TAG, "Start refreshing");
-        //mRefreshView.setEnabled(false);
     }
 
     @Override
     public void hideRefreshView() {
+        mRecyclerView.addOnScrollListener(mOnScrolllistener);
         Log.d(TAG, "Stop refreshing");
         mRefreshView.setRefreshing(false);
-        //mRefreshView.setEnabled(true);
     }
 
     @Override
@@ -188,20 +181,16 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
 
     @Override
     public void showLoadMoreProgress() {
+        mRecyclerView.clearOnScrollListeners();
         mRefreshView.setEnabled(false);
         mRepositoriesAdapter.showLoadMoreAnimation();
-        //mProgressBar.setVisibility(View.VISIBLE);
-        //mRefreshView.setVisibility(View.GONE);
-        Log.d(TAG, "showLoadMoreProgress");
     }
 
     @Override
     public void hideLoadMoreProgress() {
+        mRecyclerView.addOnScrollListener(mOnScrolllistener);
         mRefreshView.setEnabled(true);
         mRepositoriesAdapter.hideLoadMoreAnimation();
-        //mProgressBar.setVisibility(View.GONE);
-        //mRefreshView.setVisibility(View.VISIBLE);
-        Log.d(TAG, "hideLoadMoreProgress");
     }
 
 }

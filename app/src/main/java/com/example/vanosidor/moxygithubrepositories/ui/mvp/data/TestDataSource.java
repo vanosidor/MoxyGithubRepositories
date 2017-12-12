@@ -60,7 +60,7 @@ public class TestDataSource implements RepositoryDataSource {
     private String getGsonFromLocalRawResource(int rawResourceId){
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
-        try (InputStream is = GithubApp.getAppComponent().getContext().getResources().openRawResource(R.raw.github_repo_example)) {
+        try (InputStream is = GithubApp.getAppComponent().getContext().getResources().openRawResource(rawResourceId)) {
             Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
             int n;
             while ((n = reader.read(buffer)) != -1) {

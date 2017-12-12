@@ -3,6 +3,7 @@ package com.example.vanosidor.moxygithubrepositories.ui.mvp.view;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
@@ -24,6 +25,8 @@ public interface RepositoriesView extends MvpView {
 
     void showError(Throwable t);
 
+    //clear commands stack
+    @StateStrategyType(SingleStateStrategy.class)
     void showRefreshView();
 
     void hideRefreshView();
