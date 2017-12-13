@@ -14,10 +14,11 @@ import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.RepositoriesView
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * Created by Ivan on 06.11.2017.
@@ -78,10 +79,10 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         loadingStart(state);
 
-        Observable <List<Repository>> repositoriesObservable =  dataSource.getRepositories("JakeWharton",page,PAGE_SIZE);
+        Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories("JakeWharton",page,PAGE_SIZE);
         //Observable<List<Repository>> repositoriesObservable = mGithubService.getRepositories("JakeWharton",page,PAGE_SIZE);
 
-        Subscription subscription = repositoriesObservable
+        Disposable disposable = repositoriesObservable
                 .subscribeOn(Schedulers.io())
                 //.doOnSubscribe(this::showLoadingView)
                 .delay(500, TimeUnit.MILLISECONDS) //imitation of slow download
@@ -97,7 +98,7 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
                             loadingError(throwable);
                 });
 
-        unsubscribeOnDestroy(subscription);
+        unsubscribeOnDestroy(disposable);
     }
 
     private void loadingStart(State state) {

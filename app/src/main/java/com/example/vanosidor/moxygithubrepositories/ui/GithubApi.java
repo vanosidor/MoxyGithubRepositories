@@ -6,11 +6,12 @@ import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.User;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
+
 
 /**
  * Created by Ivan on 06.11.2017.

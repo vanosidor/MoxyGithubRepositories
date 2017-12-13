@@ -13,11 +13,10 @@ import android.util.Base64;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
-
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Ivan on 06.11.2017.
@@ -56,9 +55,7 @@ public class AuthPresenter extends BasePresenter<AuthView>{
         String credentials = String.format("%s:%s",email,password);
         final String token = "Basic "+ Base64.encodeToString(credentials.getBytes(),Base64.NO_WRAP);
 
-
-
-        Subscription subscription = githubService.signIn(token)
+        Disposable disposable = githubService.signIn(token)
                 .doOnNext(user->AuthUtils.setToken(token))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -70,8 +67,7 @@ public class AuthPresenter extends BasePresenter<AuthView>{
                     getViewState().failedLogin(exception.getMessage());
                 });
 
-        unsubscribeOnDestroy(subscription);
-
+        unsubscribeOnDestroy(disposable);
     }
 
 

@@ -4,7 +4,7 @@ import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 
 /**

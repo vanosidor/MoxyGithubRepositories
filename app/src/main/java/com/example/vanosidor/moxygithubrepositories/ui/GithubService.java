@@ -7,9 +7,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
+
 
 /**
  * Created by Ivan on 06.11.2017.
