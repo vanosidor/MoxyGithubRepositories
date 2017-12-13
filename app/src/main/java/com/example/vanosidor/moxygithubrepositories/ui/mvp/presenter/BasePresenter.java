@@ -6,6 +6,8 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.MvpView;
 
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -15,15 +17,15 @@ import rx.subscriptions.CompositeSubscription;
 
 public class BasePresenter <View extends MvpView> extends MvpPresenter <View> {
 
-    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
+    CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    protected void unsubscribeOnDestroy(@NonNull Subscription subscription){
-        mCompositeSubscription.add(subscription);
+    protected void unsubscribeOnDestroy(@NonNull Disposable disposable){
+        mCompositeDisposable.add(disposable);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCompositeSubscription.clear();
+        mCompositeDisposable.dispose();
     }
 }
