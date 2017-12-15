@@ -13,7 +13,7 @@ import dagger.Provides;
  */
 
 @Module(includes = {ApiModule.class})
-public class GithubModule {
+public class GithubServiceModule {
     @Provides
     @Singleton
     public GithubService provideGithubService(GithubApi githubApi){

@@ -5,14 +5,18 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubService;
+import com.example.vanosidor.moxygithubrepositories.ui.database.UserDao;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.NetworkDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.RepositoryDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.TestDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.User;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.RepositoriesView;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,8 +40,11 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
     private boolean mIsLoading;
 
-    public RepositoriesPresenter() {
+    @Inject
+    UserDao userDao;
 
+    public RepositoriesPresenter() {
+        GithubApp.getAppComponent().inject(this);
     }
 
     @Override
@@ -68,6 +75,8 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         //https://api.github.com/users/JakeWharton/repos?page=2&&per_page=50
 
+        String userName = "JakeWharton";
+
         //change real data to test data from local json
         RepositoryDataSource dataSource = new TestDataSource();
         //RepositoryDataSource dataSource = new NetworkDataSource();
@@ -79,8 +88,7 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         loadingStart(state);
 
-        Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories("JakeWharton",page,PAGE_SIZE);
-        //Observable<List<Repository>> repositoriesObservable = mGithubService.getRepositories("JakeWharton",page,PAGE_SIZE);
+        Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories(userName,page,PAGE_SIZE);
 
         Disposable disposable = repositoriesObservable
                 .subscribeOn(Schedulers.io())
@@ -137,7 +145,6 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
         }
         else {
             getViewState().showMoreData(repositories);
-            //Log.d(TAG, "loadingSuccess: show more data");
         }
     }
 }

@@ -8,8 +8,7 @@ import com.arellomobile.mvp.MvpView;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+
 
 /**
  * Created by Ivan on 06.11.2017.

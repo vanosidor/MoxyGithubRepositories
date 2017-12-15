@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.example.vanosidor.moxygithubrepositories.R;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubService;
+import com.example.vanosidor.moxygithubrepositories.ui.database.UserDao;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.utils.AuthUtils;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.AuthView;
 
@@ -27,6 +28,9 @@ public class AuthPresenter extends BasePresenter<AuthView>{
 
     @Inject
     GithubService githubService;
+
+    @Inject
+    UserDao userDao;
 
     public AuthPresenter() {
         GithubApp.getAppComponent().inject(this);
@@ -56,7 +60,13 @@ public class AuthPresenter extends BasePresenter<AuthView>{
         final String token = "Basic "+ Base64.encodeToString(credentials.getBytes(),Base64.NO_WRAP);
 
         Disposable disposable = githubService.signIn(token)
-                .doOnNext(user->AuthUtils.setToken(token))
+                .doOnSuccess(
+                        user->{
+                            AuthUtils.setToken(token);
+                            userDao.clearAll();
+                            userDao.insert(user);
+                        }
+                )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {

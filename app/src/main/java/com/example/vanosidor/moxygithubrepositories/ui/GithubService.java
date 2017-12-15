@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -26,7 +27,7 @@ public class GithubService {
         this.mGithubApi = githubApi;
     }
 
-    public Observable<User> signIn(String token) {
+    public Single<User> signIn(String token) {
         return mGithubApi.signIn(token);
     }
 
