@@ -1,9 +1,11 @@
 package com.example.vanosidor.moxygithubrepositories.ui.ui.activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -30,7 +32,7 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView{
     View mAuthForm;
 
     @BindView(R.id.auth_email_et)
-    EditText mEmailView;
+    AutoCompleteTextView mEmailView;
 
     @BindView(R.id.auth_password_et)
     EditText mPasswordView;
