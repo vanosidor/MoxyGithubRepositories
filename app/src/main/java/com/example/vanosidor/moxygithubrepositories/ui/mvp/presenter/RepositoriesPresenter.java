@@ -4,13 +4,11 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
-import com.example.vanosidor.moxygithubrepositories.ui.GithubService;
+import com.example.vanosidor.moxygithubrepositories.ui.database.RepositoriesDao;
 import com.example.vanosidor.moxygithubrepositories.ui.database.UserDao;
-import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.NetworkDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.RepositoryDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.TestDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
-import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.User;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.view.RepositoriesView;
 
 import java.util.List;
@@ -21,7 +19,10 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
 
 
 /**
@@ -42,6 +43,9 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
     @Inject
     UserDao userDao;
+
+    @Inject
+    RepositoriesDao reposDao;
 
     public RepositoriesPresenter() {
         GithubApp.getAppComponent().inject(this);
@@ -88,12 +92,18 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         loadingStart(state);
 
-        Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories(userName,page,PAGE_SIZE);
+        Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories(userName,page,PAGE_SIZE)
+                .map(repositories -> {
+                    saveReposInDB(repositories);
+                    return repositories;
+                });
+
 
         Disposable disposable = repositoriesObservable
                 .subscribeOn(Schedulers.io())
                 //.doOnSubscribe(this::showLoadingView)
                 .delay(500, TimeUnit.MILLISECONDS) //imitation of slow download
+                .onErrorResumeNext(loadFromDb)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositories -> {
                             //repositories=new ArrayList<>(); //test no repositories
@@ -108,6 +118,11 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         unsubscribeOnDestroy(disposable);
     }
+
+    private void saveReposInDB(List<Repository> repositories) {
+    }
+
+    private final Function<Throwable, Observable<List<Repository>>> loadFromDb  = throwable -> Observable.just(reposDao.getRepositories());
 
     private void loadingStart(State state) {
 

@@ -1,5 +1,11 @@
 package com.example.vanosidor.moxygithubrepositories.ui.mvp.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -12,7 +18,14 @@ import java.util.Date;
  * Created by Stend on 08.11.2017.
  */
 
-@DatabaseTable
+@Entity(tableName = "repositories",
+        foreignKeys = @ForeignKey(
+            entity = User.class,
+            parentColumns = "_id",
+            childColumns = "ownerId"),
+        indices = @Index(
+                value = "ownerId",
+                name = "owner_id_idx",unique = true))
 public class Repository implements Serializable {
 
     public static class Column {
@@ -22,7 +35,7 @@ public class Repository implements Serializable {
         public static final String DESC = "desc";
         public static final String URL = "url";
         public static final String HTML_URL = "html_url";
-        public static final String OWNER = "owner";
+        public static final String OWNER = "ownerId";
         public static final String IS_FORK = "is_fork";
         public static final String IS_PRIVATE = "is_private";
         public static final String CREATED_AT = "created_at";
@@ -45,64 +58,101 @@ public class Repository implements Serializable {
         public static final String DEFAULT_BRANCH = "default_branch";
     }
 
-    @DatabaseField(columnName = Column.ID, id = true)
+    @PrimaryKey(autoGenerate = true)
+    private int mKey;
+
+    @ColumnInfo(name = Column.ID)
     private int mId;
-    @DatabaseField(columnName = Column.NAME)
+
+    @ColumnInfo(name = Column.NAME)
     private String mName;
-    @DatabaseField(columnName = Column.FULL_NAME)
+
+    @ColumnInfo(name = Column.FULL_NAME)
     private String mFullName;
+
     @SerializedName("description")
-    @DatabaseField(columnName = Column.DESC)
+    @ColumnInfo(name = Column.DESC)
     private String mDesc;
-    @DatabaseField(columnName = Column.URL)
+
+    @ColumnInfo(name = Column.URL)
     private String mUrl;
-    @DatabaseField(columnName = Column.HTML_URL)
+
+    @ColumnInfo(name = Column.HTML_URL)
     private String mHtmlUrl;
-    @DatabaseField(columnName = Column.OWNER, foreign = true)
-    private transient User mOwner;
+
+    @ColumnInfo(name = Column.OWNER)
+    private int mOwnerId;
+
     @SerializedName("fork")
-    @DatabaseField(columnName = Column.IS_FORK)
+    @ColumnInfo(name = Column.IS_FORK)
     private String mIsFork;
+
     @SerializedName("private")
-    @DatabaseField(columnName = Column.IS_PRIVATE)
+    @ColumnInfo(name = Column.IS_PRIVATE)
     private String mIsPrivate;
-    @DatabaseField(columnName = Column.CREATED_AT, dataType = DataType.DATE)
-    private Date mCreatedAt;
-    @DatabaseField(columnName = Column.UPDATED_AT, dataType = DataType.DATE)
-    private Date mUpdatedAt;
-    @DatabaseField(columnName = Column.PUSHED_AT, dataType = DataType.DATE)
-    private Date mPushedAt;
-    @DatabaseField(columnName = Column.GIT_URL)
+
+    @ColumnInfo(name = Column.CREATED_AT)
+    private String mCreatedAt;
+
+    @ColumnInfo(name = Column.UPDATED_AT)
+    private String mUpdatedAt;
+
+    @ColumnInfo(name = Column.PUSHED_AT)
+    private String mPushedAt;
+
+    @ColumnInfo(name = Column.GIT_URL)
     private String mGitUrl;
-    @DatabaseField(columnName = Column.SSH_URL)
+
+    @ColumnInfo(name = Column.SSH_URL)
     private String mSshUrl;
-    @DatabaseField(columnName = Column.CLONE_URL)
+
+    @ColumnInfo(name = Column.CLONE_URL)
     private String mCloneUrl;
-    @DatabaseField(columnName = Column.SVN_URL)
+
+    @ColumnInfo(name = Column.SVN_URL)
     private String mSvnUrl;
-    @DatabaseField(columnName = Column.HOMEPAGE)
+
+    @ColumnInfo(name = Column.HOMEPAGE)
     private String mHomepage;
-    @DatabaseField(columnName = Column.SIZE)
+
+    @ColumnInfo(name = Column.SIZE)
     private long mSize;
+
     @SerializedName("stargazers_count")
-    @DatabaseField(columnName = Column.STARS_COUNT)
+    @ColumnInfo(name = Column.STARS_COUNT)
     private int mStarsCount;
-    @DatabaseField(columnName = Column.WATCHERS_COUNT)
+
+    @ColumnInfo(name = Column.WATCHERS_COUNT)
     private int mWatchersCount;
-    @DatabaseField(columnName = Column.LANGUAGE)
+
+    @ColumnInfo(name = Column.LANGUAGE)
     private String mLanguage;
-    @DatabaseField(columnName = Column.HAS_ISSUES)
+
+    @ColumnInfo(name = Column.HAS_ISSUES)
     private boolean mHasIssues;
-    @DatabaseField(columnName = Column.HAS_DOWNLOADS)
+
+    @ColumnInfo(name = Column.HAS_DOWNLOADS)
     private boolean mHasDownloads;
-    @DatabaseField(columnName = Column.HAS_WIKI)
+
+    @ColumnInfo(name = Column.HAS_WIKI)
     private boolean mHasWiki;
-    @DatabaseField(columnName = Column.FORKS_COUNT)
+
+    @ColumnInfo(name = Column.FORKS_COUNT)
     private int mForksCount;
-    @DatabaseField(columnName = Column.OPEN_ISSUES_COUNT)
+
+    @ColumnInfo(name = Column.OPEN_ISSUES_COUNT)
     private int mOpenIssuesCount;
-    @DatabaseField(columnName = Column.DEFAULT_BRANCH)
+
+    @ColumnInfo(name = Column.DEFAULT_BRANCH)
     private String mDefaultBranch;
+
+    public int getKey() {
+        return mKey;
+    }
+
+    public void setKey(int key) {
+        this.mKey = key;
+    }
 
     public int getId() {
         return mId;
@@ -152,12 +202,12 @@ public class Repository implements Serializable {
         mHtmlUrl = htmlUrl;
     }
 
-    public User getOwner() {
-        return mOwner;
+    public int getOwnerId() {
+        return mOwnerId;
     }
 
-    public void setOwner(User owner) {
-        mOwner = owner;
+    public void setOwnerId(int ownerId) {
+        this.mOwnerId = ownerId;
     }
 
     public String isFork() {
@@ -176,27 +226,27 @@ public class Repository implements Serializable {
         mIsPrivate = isPrivate;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return mCreatedAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         mCreatedAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public String getUpdatedAt() {
         return mUpdatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(String updatedAt) {
         mUpdatedAt = updatedAt;
     }
 
-    public Date getPushedAt() {
+    public String getPushedAt() {
         return mPushedAt;
     }
 
-    public void setPushedAt(Date pushedAt) {
+    public void setPushedAt(String pushedAt) {
         mPushedAt = pushedAt;
     }
 

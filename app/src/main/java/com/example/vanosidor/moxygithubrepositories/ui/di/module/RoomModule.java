@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room;
 
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.database.AppDatabase;
+import com.example.vanosidor.moxygithubrepositories.ui.database.RepositoriesDao;
 import com.example.vanosidor.moxygithubrepositories.ui.database.UserDao;
 
 import javax.inject.Singleton;
@@ -25,8 +26,14 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    UserDao providesProductDao(AppDatabase demoDatabase) {
-        return demoDatabase.userDao();
+    UserDao providesUserDao(AppDatabase database) {
+        return database.userDao();
+    }
+
+    @Singleton
+    @Provides
+    RepositoriesDao providesRepositoriesDao(AppDatabase database) {
+        return database.repositoriesDao();
     }
 
     @Singleton

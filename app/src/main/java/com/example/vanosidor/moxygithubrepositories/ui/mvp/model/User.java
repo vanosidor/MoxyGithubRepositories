@@ -2,6 +2,7 @@ package com.example.vanosidor.moxygithubrepositories.ui.mvp.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -24,9 +25,8 @@ public class User {
         static final String FOLLOWING = "following";
     }
 
-    @PrimaryKey(autoGenerate = true)
-    private int key;
 
+    @PrimaryKey
     @ColumnInfo(name = Column.ID)
     private int mId;
 
@@ -48,13 +48,7 @@ public class User {
     @ColumnInfo(name = Column.FOLLOWING)
     private int mFollowing;
 
-    public int getKey() {
-        return key;
-    }
 
-    public void setKey(int key) {
-        this.key = key;
-    }
 
     public int getId() {
         return mId;
