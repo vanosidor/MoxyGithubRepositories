@@ -27,6 +27,6 @@ public class NetworkDataSource implements RepositoryDataSource {
 
     @Override
     public Observable<List<Repository>> getRepositories(String name, int page, int pageSize) {
-        return mGithubService.getRepositories("JakeWharton",page,pageSize);
+        return mGithubService.getRepositories(name,page,pageSize);
     }
 }
