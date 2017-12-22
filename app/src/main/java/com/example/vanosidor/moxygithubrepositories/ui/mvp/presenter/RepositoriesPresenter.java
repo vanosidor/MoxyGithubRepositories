@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.example.vanosidor.moxygithubrepositories.ui.GithubApp;
 import com.example.vanosidor.moxygithubrepositories.ui.database.RepositoriesDao;
 import com.example.vanosidor.moxygithubrepositories.ui.database.UserDao;
+import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.NetworkDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.RepositoryDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.data.TestDataSource;
 import com.example.vanosidor.moxygithubrepositories.ui.mvp.model.Repository;
@@ -79,7 +80,7 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         //https://api.github.com/users/JakeWharton/repos?page=2&&per_page=50
 
-        String userName = "JakeWharton";
+        String userName = "vanosidor";
 
         //change real data to test data from local json
         RepositoryDataSource dataSource = new TestDataSource();
@@ -94,7 +95,13 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories(userName,page,PAGE_SIZE)
                 .map(repositories -> {
+
+                    Log.d(TAG, "before save repos in db.Count = "+repositories.size());
+                    if (state==State.FIRSTLOADING || state == State.REFRESH ){
+                        reposDao.clearAllRepositories();
+                    }
                     saveReposInDB(repositories);
+                    Log.d(TAG, "after save repos in db.Count = "+repositories.size());
                     return repositories;
                 });
 
@@ -120,6 +127,7 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
     }
 
     private void saveReposInDB(List<Repository> repositories) {
+        reposDao.insert(repositories);
     }
 
     private final Function<Throwable, Observable<List<Repository>>> loadFromDb  = throwable -> Observable.just(reposDao.getRepositories());

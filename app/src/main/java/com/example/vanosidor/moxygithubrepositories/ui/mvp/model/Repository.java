@@ -18,14 +18,14 @@ import java.util.Date;
  * Created by Stend on 08.11.2017.
  */
 
-@Entity(tableName = "repositories",
+@Entity(tableName = "repositories"/*,
         foreignKeys = @ForeignKey(
             entity = User.class,
             parentColumns = "_id",
             childColumns = "ownerId"),
         indices = @Index(
                 value = "ownerId",
-                name = "owner_id_idx",unique = true))
+                name = "owner_id_idx",unique = true)*/)
 public class Repository implements Serializable {
 
     public static class Column {
@@ -58,9 +58,7 @@ public class Repository implements Serializable {
         public static final String DEFAULT_BRANCH = "default_branch";
     }
 
-    @PrimaryKey(autoGenerate = true)
-    private int mKey;
-
+    @PrimaryKey
     @ColumnInfo(name = Column.ID)
     private int mId;
 
@@ -145,14 +143,6 @@ public class Repository implements Serializable {
 
     @ColumnInfo(name = Column.DEFAULT_BRANCH)
     private String mDefaultBranch;
-
-    public int getKey() {
-        return mKey;
-    }
-
-    public void setKey(int key) {
-        this.mKey = key;
-    }
 
     public int getId() {
         return mId;

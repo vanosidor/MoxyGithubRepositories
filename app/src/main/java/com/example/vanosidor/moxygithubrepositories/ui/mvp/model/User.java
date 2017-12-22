@@ -25,7 +25,6 @@ public class User {
         static final String FOLLOWING = "following";
     }
 
-
     @PrimaryKey
     @ColumnInfo(name = Column.ID)
     private int mId;
@@ -47,8 +46,6 @@ public class User {
 
     @ColumnInfo(name = Column.FOLLOWING)
     private int mFollowing;
-
-
 
     public int getId() {
         return mId;

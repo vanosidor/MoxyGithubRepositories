@@ -149,7 +149,7 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
 
     @Override
     public void showError(Throwable t) {
-        Toast.makeText(this, t.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Error loading was occurred.Loading from data from database", Toast.LENGTH_LONG).show();
     }
 
     @Override
