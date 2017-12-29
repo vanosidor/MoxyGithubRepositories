@@ -29,33 +29,34 @@ import java.util.Date;
 public class Repository implements Serializable {
 
     public static class Column {
-        public static final String ID = "_id";
-        public static final String NAME = "name";
-        public static final String FULL_NAME = "full_name";
-        public static final String DESC = "desc";
-        public static final String URL = "url";
-        public static final String HTML_URL = "html_url";
-        public static final String OWNER = "ownerId";
-        public static final String IS_FORK = "is_fork";
-        public static final String IS_PRIVATE = "is_private";
-        public static final String CREATED_AT = "created_at";
-        public static final String UPDATED_AT = "updated_at";
-        public static final String PUSHED_AT = "pushed_at";
-        public static final String GIT_URL = "git_url";
-        public static final String SSH_URL = "ssh_url";
-        public static final String CLONE_URL = "clone_url";
-        public static final String SVN_URL = "svn_url";
-        public static final String HOMEPAGE = "homepage";
-        public static final String SIZE = "size";
-        public static final String STARS_COUNT = "stars_count";
-        public static final String WATCHERS_COUNT = "watchers_count";
-        public static final String LANGUAGE = "language";
-        public static final String HAS_ISSUES = "has_issues";
-        public static final String HAS_DOWNLOADS = "has_downloads";
-        public static final String HAS_WIKI = "has_wiki";
-        public static final String FORKS_COUNT = "forks_count";
-        public static final String OPEN_ISSUES_COUNT = "open_issues_count";
-        public static final String DEFAULT_BRANCH = "default_branch";
+        static final String ID = "_id";
+        static final String NAME = "name";
+        static final String FULL_NAME = "full_name";
+        static final String DESC = "desc";
+        static final String URL = "url";
+        static final String HTML_URL = "html_url";
+        static final String OWNER = "ownerId";
+        static final String IS_FORK = "is_fork";
+        static final String IS_PRIVATE = "is_private";
+        static final String CREATED_AT = "created_at";
+        static final String UPDATED_AT = "updated_at";
+        static final String PUSHED_AT = "pushed_at";
+        static final String GIT_URL = "git_url";
+        static final String SSH_URL = "ssh_url";
+        static final String CLONE_URL = "clone_url";
+        static final String SVN_URL = "svn_url";
+        static final String HOMEPAGE = "homepage";
+        static final String SIZE = "size";
+        static final String STARS_COUNT = "stars_count";
+        static final String WATCHERS_COUNT = "watchers_count";
+        static final String LANGUAGE = "language";
+        static final String HAS_ISSUES = "has_issues";
+        static final String HAS_DOWNLOADS = "has_downloads";
+        static final String HAS_WIKI = "has_wiki";
+        static final String FORKS_COUNT = "forks_count";
+        static final String OPEN_ISSUES_COUNT = "open_issues_count";
+        static final String DEFAULT_BRANCH = "default_branch";
+        static final String MIRROR_URL = "mirror_url";
     }
 
     @PrimaryKey
@@ -83,11 +84,11 @@ public class Repository implements Serializable {
 
     @SerializedName("fork")
     @ColumnInfo(name = Column.IS_FORK)
-    private String mIsFork;
+    private boolean mIsFork;
 
     @SerializedName("private")
     @ColumnInfo(name = Column.IS_PRIVATE)
-    private String mIsPrivate;
+    private boolean mIsPrivate;
 
     @ColumnInfo(name = Column.CREATED_AT)
     private String mCreatedAt;
@@ -143,6 +144,9 @@ public class Repository implements Serializable {
 
     @ColumnInfo(name = Column.DEFAULT_BRANCH)
     private String mDefaultBranch;
+
+    @ColumnInfo(name=Column.MIRROR_URL)
+    private String mMirrorUrl;
 
     public int getId() {
         return mId;
@@ -200,19 +204,17 @@ public class Repository implements Serializable {
         this.mOwnerId = ownerId;
     }
 
-    public String isFork() {
+    public boolean isFork() {
         return mIsFork;
     }
 
-    public void setIsFork(String isFork) {
+    public void setIsFork(boolean isFork) {
         mIsFork = isFork;
     }
 
-    public String getIsPrivate() {
-        return mIsPrivate;
-    }
+    public boolean isPrivate() {return mIsPrivate;}
 
-    public void setIsPrivate(String isPrivate) {
+    public void setIsPrivate(boolean isPrivate) {
         mIsPrivate = isPrivate;
     }
 
@@ -359,5 +361,9 @@ public class Repository implements Serializable {
     public void setDefaultBranch(String defaultBranch) {
         mDefaultBranch = defaultBranch;
     }
+
+    public String getMirrorUrl() {return mMirrorUrl;}
+
+    public void setMirrorUrl(String mirrorUrl) {this.mMirrorUrl = mirrorUrl;}
 }
 

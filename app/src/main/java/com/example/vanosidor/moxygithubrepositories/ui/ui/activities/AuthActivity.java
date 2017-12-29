@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,14 @@ public class AuthActivity extends MvpAppCompatActivity implements AuthView{
         setContentView(R.layout.activity_auth);
 
         ButterKnife.bind(this);
+
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == R.id.ime_action_login || id == EditorInfo.IME_NULL) {
+                tryLogin();
+                return true;
+            }
+            return false;
+        });
 
         mAuthButton.setOnClickListener(view -> tryLogin());
     }

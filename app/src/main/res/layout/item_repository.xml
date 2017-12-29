@@ -1,33 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.example.vanosidor.moxygithubrepositories.ui.ui.view.OcticonTextView
+        android:id="@+id/tv_repo_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/tv2"
+        android:layout_marginTop="16dp"
+        android:text="@string/icon_public"
+        android:textColor="#516079"
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+         />
 
     <TextView
-        android:id="@+id/tv2"
+        android:id="@+id/tv_repo_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="124dp"
         android:layout_marginTop="8dp"
-        android:text="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:singleLine="true"
+        android:textColor="#1E1E1E"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:text="RepoName"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/tv_repo_icon"
+         />
+
+    <TextView
+        android:id="@+id/tv_repo_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:text="RepositoryDescription awrerwrawrwarawrwrwrwrwrsslkllllssssssssssssssssssssssss"
+        app:layout_constraintTop_toBottomOf="@+id/tv_repo_name"
+        app:layout_constraintStart_toStartOf="@+id/tv_repo_name"
+        app:layout_constraintEnd_toEndOf="parent"
+         />
+
+    <LinearLayout
+        android:id="@+id/repo_detail_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginBottom="8dp"
+        android:paddingTop="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_repo_description"
+        app:layout_constraintTop_toBottomOf="@+id/tv_repo_description">
+
+        <include layout="@layout/item_repository_detail" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/v_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repo_detail_layout" />
+
 </android.support.constraint.ConstraintLayout>

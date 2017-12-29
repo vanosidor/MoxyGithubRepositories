@@ -37,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="16dp"
-
             >
             <AutoCompleteTextView
                 android:id="@+id/auth_email_et"
@@ -57,7 +56,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             >
-
             <EditText
                 android:id="@+id/auth_password_et"
                 android:layout_width="match_parent"
@@ -68,9 +66,9 @@
                 android:maxLines="1"
                 android:imeActionLabel="@string/text_sign_in"
                 android:imeOptions="actionUnspecified"
+                android:imeActionId="@+id/ime_action_login"
                 />
         </android.support.design.widget.TextInputLayout>
-
         <Button
             android:id="@+id/auth_button"
             android:layout_width="match_parent"
@@ -84,7 +82,6 @@
             android:textColor="#ffffffff"
             android:background="#ff7e51c2"/>
     </LinearLayout>
-
     <ProgressBar
         android:id="@+id/auth_progress"
         android:layout_width="wrap_content"

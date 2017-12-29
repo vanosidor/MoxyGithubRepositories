@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/tv_repo_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp"
+        android:text="JAVA"
+        android:textColor="#AEAEAE"
+        android:textSize="14sp" />
+
+    <com.example.vanosidor.moxygithubrepositories.ui.ui.view.OcticonTextView
+        android:id="@+id/tv_watchers_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_star"
+        android:textColor="#f5ac0d" />
+
+    <TextView
+        android:id="@+id/tv_watchers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp"
+        android:text="10"
+        android:textColor="#AEAEAE" />
+
+    <com.example.vanosidor.moxygithubrepositories.ui.ui.view.OcticonTextView
+        android:id="@+id/tv_forks_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_fork"
+        android:textColor="#448aff" />
+
+    <TextView
+        android:id="@+id/tv_forks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12"
+        android:textColor="#AEAEAE" />
+</merge>
+

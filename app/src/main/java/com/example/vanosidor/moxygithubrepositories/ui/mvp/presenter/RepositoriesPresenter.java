@@ -24,8 +24,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-
-
 /**
  * Created by Ivan on 06.11.2017.
  */
@@ -95,7 +93,6 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
 
         Observable<List<Repository>> repositoriesObservable =  dataSource.getRepositories(userName,page,PAGE_SIZE)
                 .map(repositories -> {
-
                     Log.d(TAG, "before save repos in db.Count = "+repositories.size());
                     if (state==State.FIRSTLOADING || state == State.REFRESH ){
                         reposDao.clearAllRepositories();
@@ -104,7 +101,6 @@ public class RepositoriesPresenter extends BasePresenter<RepositoriesView> {
                     Log.d(TAG, "after save repos in db.Count = "+repositories.size());
                     return repositories;
                 });
-
 
         Disposable disposable = repositoriesObservable
                 .subscribeOn(Schedulers.io())

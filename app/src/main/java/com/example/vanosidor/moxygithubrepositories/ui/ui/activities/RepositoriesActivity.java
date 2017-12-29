@@ -122,6 +122,7 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
     @Override
     public void signOut() {
         Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         Log.d(TAG, "signOut");
     }
@@ -192,5 +193,4 @@ public class RepositoriesActivity extends MvpAppCompatActivity implements Reposi
         mRefreshView.setEnabled(true);
         mRepositoriesAdapter.hideLoadMoreAnimation();
     }
-
 }
